@@ -18,13 +18,13 @@ class APILoadTest(HttpUser):
 
             try:
                 if method == "GET":
-                    response = self.client.get(endpoint, headers=headers, name=endpoint)
+                    response = self.client.get(endpoint, headers=headers, verify=False)
                 elif method == "POST":
-                    response = self.client.post(endpoint, json=body, headers=headers, name=endpoint)
+                    response = self.client.post(endpoint, json=body, headers=headers, verify=False)
                 elif method == "PUT":
-                    response = self.client.put(endpoint, json=body, headers=headers, name=endpoint)
+                    response = self.client.put(endpoint, json=body, headers=headers, verify=False)
                 elif method == "DELETE":
-                    response = self.client.delete(endpoint, headers=headers, name=endpoint)
+                    response = self.client.delete(endpoint, headers=headers, verify=False)
                 else:
                     response.failure(f"Unsupported method: {method}")
                     continue
