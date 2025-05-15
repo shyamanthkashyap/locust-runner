@@ -7,8 +7,7 @@ with open("config.json") as f:
 
 class APILoadTest(HttpUser):
     wait_time = between(1, 2)
-    host = "https://jsonplaceholder.typicode.com"
-
+    
     @task
     def test_endpoints(self):
         for api in config["apis"]:
