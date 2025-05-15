@@ -14,15 +14,28 @@ class APILoadTest(HttpUser):
             endpoint = api["url"]
             body = api.get("body", {})
             headers = api.get("headers", {})
+            assertion = api.get("assert", {})
 
             try:
                 if method == "GET":
-                    self.client.get(endpoint, headers=headers, verify=False)
+                    response = self.client.get(endpoint, headers=headers, name=endpoint)
                 elif method == "POST":
-                    self.client.post(endpoint, json=body, headers=headers, verify=False)
+                    response = self.client.post(endpoint, json=body, headers=headers, name=endpoint)
                 elif method == "PUT":
-                    self.client.put(endpoint, json=body, headers=headers, verify=False)
+                    response = self.client.put(endpoint, json=body, headers=headers, name=endpoint)
                 elif method == "DELETE":
-                    self.client.delete(endpoint, headers=headers, verify=False)
+                    response = self.client.delete(endpoint, headers=headers, name=endpoint)
+                else:
+                    response.failure(f"Unsupported method: {method}")
+                    continue
+
+                expected_status = assertion.get("status_code", {})
+                if expected_status and response.status_code != expected_status:
+                    response.failure(f"Expected status {expected_status}, got {response.status_code}")
+
+                expected_content = assertion.get("body_contains", {})
+                if expected_content and expected_content not in response.text:
+                    response.failure(f"Response does not contain '{expected_content}'")
+
             except Exception as e:
-                print(f"Error calling {endpoint}: {e}")
+                response.failure(f"Error calling {endpoint}: {e}")
