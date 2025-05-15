@@ -15,6 +15,46 @@ jobs:
       config: |
         {
           "apis": [
-            { "url": "/todos/1", "method": "GET", "assert": { "status_code" : 300 } }
+            {
+              "url": "/todos/1",
+              "method": "GET",
+              "assert": {
+                "status_code": 300
+              }
+            },
+            {
+              "url": "/todos/1",
+              "method": "GET",
+              "assert": {
+                "status_code": 200,
+                "body_contains": {
+                  "id": 1,
+                  "title": "...",
+                  "body": "...",
+                  "userId": 1
+                }
+              }
+            },
+            {
+              "url": "/posts",
+              "method": "POST",
+              "body": {
+                "title": "foo",
+                "body": "bar",
+                "userId": 1
+              },
+              "headers": {
+                "Content-type": "application/json; charset=UTF-8"
+              },
+              "assert": {
+                "status_code": 201,
+                "body_contains": {
+                  "id": 101,
+                  "title": "foo",
+                  "body": "bar",
+                  "userId": 1
+                }
+              }
+            }
           ]
         }
