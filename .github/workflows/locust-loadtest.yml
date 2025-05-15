@@ -1,0 +1,38 @@
+name: Reusable Locust Load Test
+
+on:
+  workflow_call:
+    inputs:
+      config:
+        required: true
+        type: string 
+      host:
+        required: true
+        type: string
+
+jobs:
+  load-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Locust
+        run: pip install locust
+
+      - name: Write config
+        run: echo '${{ inputs.config }}' > config.json
+
+      - name: Run Locust test
+        run: |
+          locust -f locustfile.py \
+            --headless \
+            -u 10 -r 2 \
+            --run-time 30s \
+            --host ${{ inputs.host }}
