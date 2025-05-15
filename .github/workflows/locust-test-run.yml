@@ -29,8 +29,8 @@ jobs:
                 "status_code": 200,
                 "body_contains": {
                   "id": 1,
-                  "title": "...",
-                  "body": "...",
+                  "title": "delectus aut autem",
+                  "completed": "False",
                   "userId": 1
                 }
               }
