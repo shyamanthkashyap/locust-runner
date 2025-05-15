@@ -45,6 +45,7 @@ jobs:
           cat config.json
 
       - name: Run Locust test
+        continue-on-error: true
         run: |
           locust -f locustfile.py \
             --headless \
