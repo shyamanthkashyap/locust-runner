@@ -1,0 +1,16 @@
+name: Run Locust Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  call-load-test:
+    uses: ./.github/workflows/locust-loadtest.yml
+    with:
+      host: 'https://jsonplaceholder.typicode.com'
+      config: |
+        {
+          "apis": [
+            { "url": "/todos/1", "method": "GET" }
+          ]
+        }
