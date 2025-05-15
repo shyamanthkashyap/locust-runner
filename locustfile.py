@@ -18,24 +18,28 @@ class APILoadTest(HttpUser):
 
             try:
                 if method == "GET":
-                    response = self.client.get(endpoint, headers=headers, verify=False)
+                    with self.client.get(endpoint, headers=headers, catch_response=True, verify=False) as response:
+                        self._check_assertions(response, assertion)
                 elif method == "POST":
-                    response = self.client.post(endpoint, json=body, headers=headers, verify=False)
+                    with self.client.post(endpoint, json=body, headers=headers, catch_response=True, verify=False) as response:
+                        self._check_assertions(response, assertion)
                 elif method == "PUT":
-                    response = self.client.put(endpoint, json=body, headers=headers, verify=False)
+                    with self.client.put(endpoint, json=body, headers=headers, catch_response=True, verify=False) as response:
+                        self._check_assertions(response, assertion)
                 elif method == "DELETE":
-                    response = self.client.delete(endpoint, headers=headers, verify=False)
+                    with self.client.delete(endpoint, headers=headers, catch_response=True, verify=False) as response:
+                        self._check_assertions(response, assertion)
                 else:
-                    response.failure(f"Unsupported method: {method}")
-                    continue
-
-                expected_status = assertion.get("status_code", {})
-                if expected_status and response.status_code != expected_status:
-                    response.failure(f"Expected status {expected_status}, got {response.status_code}")
-
-                expected_content = assertion.get("body_contains", {})
-                if expected_content and expected_content not in response.text:
-                    response.failure(f"Response does not contain '{expected_content}'")
+                    print(f"Unsupported method: {method}")
 
             except Exception as e:
-                response.failure(f"Error calling {endpoint}: {e}")
+                print(f"Error calling {endpoint}: {e}")
+
+    def _check_assertions(self, response, assertion):
+        expected_status = assertion.get("status_code")
+        if expected_status and response.status_code != expected_status:
+            response.failure(f"Expected status {expected_status}, got {response.status_code}")
+
+        expected_content = assertion.get("body_contains")
+        if expected_content and expected_content not in response.text:
+            response.failure(f"Response does not contain '{expected_content}'")
