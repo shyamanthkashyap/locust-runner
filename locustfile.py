@@ -34,6 +34,11 @@ class APILoadTest(HttpUser):
 
             except Exception as e:
                 print(f"Error calling {endpoint}: {e}")
+                events.request.fire(
+                    request_type=method,
+                    name=endpoint,
+                    exception=e
+                )
 
     def _check_assertions(self, response, assertion):
         response_json = {}
