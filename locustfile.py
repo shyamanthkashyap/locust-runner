@@ -47,7 +47,7 @@ class APILoadTest(HttpUser):
         if expected_status and response.status_code != expected_status:
             response.failure(f"Expected status {expected_status}, got {response.status_code}")
 
-        expected_body = expected.get("body_contains", {})
+        expected_body = assertion.get("body_contains", {})
         if expected_body:
             for key, value in expected_body.items():
                 if key not in response_json or response_json[key] != value:
