@@ -15,6 +15,6 @@ jobs:
       config: |
         {
           "apis": [
-            { "url": "/todos/1", "method": "GET" }
+            { "url": "/todos/1", "method": "GET", "assert": { "status-code" : 300 } }
           ]
         }
