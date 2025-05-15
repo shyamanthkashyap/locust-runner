@@ -50,7 +50,7 @@ class APILoadTest(HttpUser):
         try:
             response_json = response.json()
         except Exception:
-            response.failure(f"Expected JSON response but got: {response.text}")
+            response.failure(f"Expected JSON response but got: {response}")
             return
 
         expected_status = assertion.get("status_code")
