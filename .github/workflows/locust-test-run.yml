@@ -8,6 +8,10 @@ jobs:
     uses: ./.github/workflows/locust-loadtest.yml
     with:
       host: 'https://jsonplaceholder.typicode.com'
+      users: 20
+      spawn_rate: 5
+      duration: 1m
+      csv_prefix: todo-test
       config: |
         {
           "apis": [
