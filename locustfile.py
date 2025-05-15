@@ -36,10 +36,20 @@ class APILoadTest(HttpUser):
                 print(f"Error calling {endpoint}: {e}")
 
     def _check_assertions(self, response, assertion):
-        expected_status = assertion.get("status_code")
+        response_json = {}
+        try:
+            response_json = response.json()
+        except Exception:
+            response.failure(f"Expected JSON response but got: {response.text}")
+            return
+            
+        expected_status = assertion.get("status_code", {})
         if expected_status and response.status_code != expected_status:
             response.failure(f"Expected status {expected_status}, got {response.status_code}")
 
-        expected_content = assertion.get("body_contains")
-        if expected_content and expected_content not in response.text:
-            response.failure(f"Response does not contain '{expected_content}'")
+        expected_body = expected.get("body_contains", {})
+        if expected_body:
+            for key, value in expected_body.items():
+                if key not in response_json or response_json[key] != value:
+                    response.failure(f"Expected body to contain {key}: {value}, got {response_json}")
+                    return
