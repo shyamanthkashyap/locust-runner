@@ -9,6 +9,19 @@ on:
       host:
         required: true
         type: string
+      users:
+        required: true
+        type: number
+      spawn_rate:
+        required: true
+        type: number
+      duration:
+        required: true
+        type: string 
+      csv_prefix:
+        required: false
+        type: string
+        default: result
 
 jobs:
   load-test:
@@ -35,13 +48,14 @@ jobs:
         run: |
           locust -f locustfile.py \
             --headless \
-            -u 10 -r 1 \
-            --run-time 30s \
+            -u ${{ inputs.users }} \
+            -r ${{ inputs.spawn_rate }} \
+            --run-time ${{ inputs.duration }} \
             --host "${{ inputs.host }}" \
-            --csv=result
+            --csv=${{ inputs.csv_prefix }}
 
       - name: Upload Locust results
         uses: actions/upload-artifact@v4
         with:
           name: locust-results
-          path: result_*.csv
+          path: ${{ inputs.csv_prefix }}_*.csv
