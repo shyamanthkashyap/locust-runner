@@ -7,7 +7,7 @@ jobs:
   call-load-test:
     uses: ./.github/workflows/locust-loadtest.yml
     with:
-      host: 'https://jsonplaceholder.typicode.com'
+      host: 'https://jsonplacholder.typicode.com'
       users: 10
       spawn_rate: 1
       duration: 10s
