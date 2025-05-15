@@ -1,5 +1,0 @@
-{
-  "apis": [
-    { "url": "/todos/1", "method": "GET" }
-  ]
-}
