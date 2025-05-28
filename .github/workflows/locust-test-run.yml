@@ -17,11 +17,6 @@ jobs:
       csv_prefix: todo-test
       config: |
         {
-          "oauth": {
-            "client_id": "${{ env.OAUTH_CLIENT_ID }}",
-            "client_secret": "${{ env.OAUTH_CLIENT_SECRET }}",
-            "token_url": "https://auth.yourorg.com"
-          },
           "apis": [
             {
               "url": "/todos/1",
